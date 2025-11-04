@@ -3,7 +3,9 @@ let userSeq=[];
 let btns=["red","yellow","green","purple"];
 let started=false;
 let level=0;
+let highScore = localStorage.getItem("simonHighScore") ? parseInt(localStorage.getItem("simonHighScore")) : 0;
 let h2=document.querySelector("h2");
+document.querySelector("h3").innerText = `High Score: ${highScore}`;
 document.addEventListener("keypress",function(){
     if(started==false){
         console.log("game started");
@@ -44,7 +46,12 @@ function checkans(idx){
             setTimeout(levelup, 1000);
         }
     }else{
-        h2.innerHTML=`Game Over! Your score was <b>${level}</b> <br> Press any key to start.`;
+        if(level > highScore){
+            highScore = level;
+            localStorage.setItem("simonHighScore", highScore.toString());
+            document.querySelector("h3").innerText = `High Score: ${highScore}`;
+        }
+        h2.innerHTML=`Game Over! Your score was <b>${level}</b>. <br> High Score: <b>${highScore}</b> <br> Press any key to start.`;
         document.querySelector("body").style.backgroundColor="red";
         setTimeout(function(){
             document.querySelector("body").style.backgroundColor="white";
@@ -54,6 +61,7 @@ function checkans(idx){
     }
 
 };
+
 function btnpress(){
     let btn=this;
     userflash(btn);
